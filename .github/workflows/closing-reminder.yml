@@ -1,0 +1,39 @@
+name: Duty Reminder
+
+on:
+  schedule:
+    # 每天晚上 20:30（北京时间） = UTC 12:30
+    - cron: "30 12 * * *"
+  workflow_dispatch:
+    inputs:
+      test_mode:
+        description: '测试模式（不实际发送消息）'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+      force_send:
+        description: '无视时间范围强制发送'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run reminder script
+        run: python3 duty_reminder.py
+        env:
+          WECHAT_WEBHOOK_KEY: ${{ secrets.WECHAT_WEBHOOK_KEY }}
+          TEST_MODE: ${{ github.event_name == 'schedule' && 'false' || github.event.inputs.test_mode }}
+          FORCE_SEND: ${{ github.event_name == 'schedule' && 'false' || github.event.inputs.force_send }}
