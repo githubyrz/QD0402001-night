@@ -7,7 +7,7 @@ TEST_MODE = os.getenv("TEST_MODE", "false").lower() == "true"
 FORCE_SEND = os.getenv("FORCE_SEND", "false").lower() == "true"
 
 # 基础日期（从这个日期开始计算4天周期）
-BASE_DATE = datetime.datetime(2025,12, 7)  # 可以修改为您想要的开始日期
+BASE_DATE = datetime.datetime(2025,12, 6)  # 可以修改为您想要的开始日期
 
 def should_send_today():
     """判断今天是否需要发送（4天一次）"""
